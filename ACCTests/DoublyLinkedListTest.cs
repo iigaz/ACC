@@ -164,8 +164,10 @@ public class DoublyLinkedListTest
         Assert.Equal(5, test.Count);
         test.Insert(4, 4);
         Assert.Equal(6, test.Count);
-        Assert.Equal(new[] { 0, 1, 2, 3, 4, 5 }, test);
-        Assert.Throws<IndexOutOfRangeException>(() => test.Insert(6, 6));
+        test.Insert(6, 6);
+        Assert.Equal(7, test.Count);
+        Assert.Equal(new[] { 0, 1, 2, 3, 4, 5, 6 }, test);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Insert(8, 8));
     }
 
 
@@ -191,5 +193,7 @@ public class DoublyLinkedListTest
         Assert.Equal(expected, linkedList);
         linkedList.Reverse();
         Assert.Equal(expected.Reverse(), linkedList);
+        linkedList.Reverse();
+        Assert.Equal(expected, linkedList);
     }
 }

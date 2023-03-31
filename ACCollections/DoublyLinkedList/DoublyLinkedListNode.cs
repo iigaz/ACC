@@ -8,6 +8,6 @@ public class DoublyLinkedListNode<TData>
     }
 
     public TData Data { get; set; }
-    public LinkedListNode<TData>? Next { get; set; }
-    public LinkedListNode<TData>? Previous { get; set; }
+    public DoublyLinkedListNode<TData>? Next { get; set; }
+    public DoublyLinkedListNode<TData>? Previous { get; set; }
 }

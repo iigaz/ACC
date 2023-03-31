@@ -90,7 +90,7 @@ public class LinkedList<TData> : ILinkedList<TData>
 
     public bool RemoveAt(int index)
     {
-        if (index >= Count) return false;
+        if (index >= Count || index < 0) return false;
         if (index == 0) return RemoveFirst();
         var previous = GetNode(index - 1);
         previous.Next = previous.Next!.Next;
