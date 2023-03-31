@@ -4,9 +4,6 @@ namespace ACCollections.DoublyLinkedList;
 
 public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
 {
-    private DoublyLinkedListNode<TData>? _first;
-    private DoublyLinkedListNode<TData>? _last;
-
     public DoublyLinkedList(IEnumerable<TData> enumerable)
     {
         foreach (var element in enumerable) AddLast(element);
@@ -14,9 +11,12 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
 
     public DoublyLinkedList()
     {
-        _first = null;
-        _last = null;
+        FirstNode = null;
+        LastNode = null;
     }
+
+    public DoublyLinkedListNode<TData>? FirstNode { get; }
+    public DoublyLinkedListNode<TData>? LastNode { get; }
 
     public void Reverse()
     {
@@ -35,8 +35,8 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
 
     public int Count { get; }
     public bool IsEmpty { get; }
-    public TData First { get; }
-    public TData Last { get; }
+    public TData First => this[0];
+    public TData Last => this[^1];
 
     public TData this[int index]
     {
@@ -90,6 +90,26 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
     }
 
     public void Insert(int index, TData data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public DoublyLinkedListNode<TData> GetNode(int index)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddAfterNode(DoublyLinkedListNode<TData> node, TData data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void AddBeforeNode(DoublyLinkedListNode<TData> node, TData data)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool RemoveNode(DoublyLinkedListNode<TData> node)
     {
         throw new NotImplementedException();
     }

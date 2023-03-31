@@ -118,22 +118,6 @@ public class LinkedListTest
     }
 
     [Fact]
-    public void Test_RemoveLast()
-    {
-        var test = new LinkedList<int>(new[] { 1, 2 });
-        var res = test.RemoveLast();
-        Assert.True(res);
-        Assert.Equal(1, test.Count);
-        Assert.Equal(1, test.First);
-        Assert.Equal(1, test.Last);
-        res = test.RemoveLast();
-        Assert.True(res);
-        Assert.Equal(0, test.Count);
-        res = test.RemoveLast();
-        Assert.False(res);
-    }
-
-    [Fact]
     public void Test_Clear()
     {
         var test = new LinkedList<int>(new[] { 1, 2, 3 });
@@ -164,8 +148,10 @@ public class LinkedListTest
         Assert.Equal(5, test.Count);
         test.Insert(4, 4);
         Assert.Equal(6, test.Count);
-        Assert.Equal(new[] { 0, 1, 2, 3, 4, 5 }, test);
-        Assert.Throws<IndexOutOfRangeException>(() => test.Insert(6, 6));
+        test.Insert(6, 6);
+        Assert.Equal(7, test.Count);
+        Assert.Equal(new[] { 0, 1, 2, 3, 4, 5, 6 }, test);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Insert(8, 8));
     }
 
 

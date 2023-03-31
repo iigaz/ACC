@@ -12,7 +12,6 @@ public interface ILinkedList<TData> : IEnumerable<TData>
     bool Remove(TData data);
     bool RemoveAt(int index);
     bool RemoveFirst();
-    bool RemoveLast();
     void Clear();
     bool Contains(TData data);
     int IndexOf(TData data);
