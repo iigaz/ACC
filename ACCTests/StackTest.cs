@@ -85,4 +85,46 @@ public class StackTest
         foreach (var e in test) stack.Push(e);
         Assert.Equal(test.Contains(element), stack.Contains(element));
     }
+
+    [Theory]
+    [InlineData("{<>}()[]", true)]
+    [InlineData("<{])", false)]
+    [InlineData("((({})))", true)]
+    [InlineData("", true)]
+    [InlineData("(", false)]
+    [InlineData("({)}", false)]
+    [InlineData(")()(", false)]
+    public void Test_BracketPairsTask(string str, bool expected)
+    {
+        // This code is not mine. I borrowed it from Who-car's stack example.
+
+        var openBrackets = new[] { '(', '{', '[', '<' };
+        var closeBrackets = new[] { ')', '}', ']', '>' };
+        var sequence = new Stack<char>();
+        foreach (var ch in str)
+            if (openBrackets.Contains(ch))
+            {
+                sequence.Push(ch);
+            }
+            else if (closeBrackets.Contains(ch))
+            {
+                if (sequence.IsEmpty)
+                {
+                    Assert.False(expected);
+                    return;
+                }
+
+                if (Array.IndexOf(closeBrackets, ch) == Array.IndexOf(openBrackets, sequence.Peek()))
+                {
+                    sequence.Pop();
+                }
+                else
+                {
+                    Assert.False(expected);
+                    return;
+                }
+            }
+
+        Assert.Equal(expected, sequence.IsEmpty);
+    }
 }
