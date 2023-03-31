@@ -217,6 +217,12 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
 
     public void AddAfterNode(DoublyLinkedListNode<TData> node, TData data)
     {
+        if (node == LastNode)
+        {
+            AddLast(data);
+            return;
+        }
+
         var customNode = new DoublyLinkedListNode<TData>(data)
         {
             Previous = node,
@@ -229,6 +235,12 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
 
     public void AddBeforeNode(DoublyLinkedListNode<TData> node, TData data)
     {
+        if (node == FirstNode)
+        {
+            AddFirst(data);
+            return;
+        }
+
         var customNode = new DoublyLinkedListNode<TData>(data)
         {
             Previous = node.Previous,
@@ -244,6 +256,7 @@ public class DoublyLinkedList<TData> : IDoublyLinkedList<TData>
         if (node == FirstNode) return RemoveFirst();
         if (node == LastNode) return RemoveLast();
         node.Previous!.Next = node.Next;
+        node.Next!.Previous = node.Previous!;
         Count--;
         return true;
     }

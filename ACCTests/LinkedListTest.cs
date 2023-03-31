@@ -30,7 +30,10 @@ public class LinkedListTest
     [InlineData(new[] { 1 }, 0)]
     public void Test_Index(int[] test, int index)
     {
-        Assert.Equal(test[index], new LinkedList<int>(test)[index]);
+        var linkedList = new LinkedList<int>(test);
+        Assert.Equal(test[index], linkedList[index]);
+        linkedList[index] = 1337;
+        Assert.Equal(1337, linkedList[index]);
     }
 
     [Fact]
@@ -83,6 +86,16 @@ public class LinkedListTest
         Assert.Equal(2, test.Count);
         Assert.Equal(1, test.First);
         Assert.Equal(3, test.Last);
+        res = test.Remove(1);
+        Assert.True(res);
+        res = test.Remove(3);
+        Assert.True(res);
+        res = test.Remove(0);
+        Assert.False(res);
+        Assert.Equal(0, test.Count);
+        Assert.True(test.IsEmpty);
+        Assert.Throws<IndexOutOfRangeException>(() => test.First);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Last);
     }
 
     [Fact]
@@ -99,6 +112,16 @@ public class LinkedListTest
         Assert.Equal(2, test.Count);
         Assert.Equal(1, test.First);
         Assert.Equal(3, test.Last);
+        res = test.RemoveAt(0);
+        Assert.True(res);
+        res = test.RemoveAt(0);
+        Assert.True(res);
+        res = test.RemoveAt(0);
+        Assert.False(res);
+        Assert.Equal(0, test.Count);
+        Assert.True(test.IsEmpty);
+        Assert.Throws<IndexOutOfRangeException>(() => test.First);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Last);
     }
 
     [Fact]

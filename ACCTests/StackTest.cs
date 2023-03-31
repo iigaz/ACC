@@ -37,6 +37,9 @@ public class StackTest
         Assert.False(stack.IsEmpty);
         Assert.Equal(1, stack.Count);
         Assert.Equal(1, stack.Peek());
+        stack.Push(2);
+        stack.Push(3);
+        Assert.Equal(new[] { 3, 2, 1 }, stack);
     }
 
     [Fact]

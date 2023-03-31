@@ -37,6 +37,9 @@ public class QueueTest
         Assert.False(queue.IsEmpty);
         Assert.Equal(1, queue.Count);
         Assert.Equal(1, queue.Peek());
+        queue.Enqueue(2);
+        queue.Enqueue(3);
+        Assert.Equal(new[] { 1, 2, 3 }, queue);
     }
 
     [Fact]

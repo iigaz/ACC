@@ -30,7 +30,10 @@ public class DoublyLinkedListTest
     [InlineData(new[] { 1 }, 0)]
     public void Test_Index(int[] test, int index)
     {
-        Assert.Equal(test[index], new DoublyLinkedList<int>(test)[index]);
+        var linkedList = new DoublyLinkedList<int>(test);
+        Assert.Equal(test[index], linkedList[index]);
+        linkedList[index] = 1337;
+        Assert.Equal(1337, linkedList[index]);
     }
 
     [Fact]
@@ -83,6 +86,16 @@ public class DoublyLinkedListTest
         Assert.Equal(2, test.Count);
         Assert.Equal(1, test.First);
         Assert.Equal(3, test.Last);
+        res = test.Remove(1);
+        Assert.True(res);
+        res = test.Remove(3);
+        Assert.True(res);
+        res = test.Remove(0);
+        Assert.False(res);
+        Assert.Equal(0, test.Count);
+        Assert.True(test.IsEmpty);
+        Assert.Throws<IndexOutOfRangeException>(() => test.First);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Last);
     }
 
     [Fact]
@@ -99,6 +112,16 @@ public class DoublyLinkedListTest
         Assert.Equal(2, test.Count);
         Assert.Equal(1, test.First);
         Assert.Equal(3, test.Last);
+        res = test.RemoveAt(1);
+        Assert.True(res);
+        res = test.RemoveAt(0);
+        Assert.True(res);
+        res = test.RemoveAt(0);
+        Assert.False(res);
+        Assert.Equal(0, test.Count);
+        Assert.True(test.IsEmpty);
+        Assert.Throws<IndexOutOfRangeException>(() => test.First);
+        Assert.Throws<IndexOutOfRangeException>(() => test.Last);
     }
 
     [Fact]
@@ -195,5 +218,66 @@ public class DoublyLinkedListTest
         Assert.Equal(expected.Reverse(), linkedList);
         linkedList.Reverse();
         Assert.Equal(expected, linkedList);
+    }
+
+    [Fact]
+    public void Test_RemoveNode()
+    {
+        var linkedList = new DoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
+        var res = linkedList.RemoveNode(linkedList.FirstNode!);
+        Assert.True(res);
+        Assert.Equal(new[] { 2, 3, 4 }, linkedList);
+        res = linkedList.RemoveNode(linkedList.FirstNode!.Next!);
+        Assert.True(res);
+        Assert.Equal(new[] { 2, 4 }, linkedList);
+        res = linkedList.RemoveNode(linkedList.LastNode!);
+        Assert.True(res);
+        Assert.Equal(new[] { 2 }, linkedList);
+    }
+
+    [Fact]
+    public void Test_GetNode()
+    {
+        var linkedList = new DoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
+        Assert.Equal(linkedList.FirstNode, linkedList.GetNode(0));
+        Assert.Equal(linkedList.First, linkedList.GetNode(0).Data);
+        Assert.Equal(linkedList.FirstNode!.Next, linkedList.GetNode(1));
+        Assert.Equal(linkedList.LastNode!.Previous, linkedList.GetNode(2));
+        Assert.Equal(linkedList.LastNode, linkedList.GetNode(3));
+        Assert.Equal(linkedList.Last, linkedList.GetNode(3).Data);
+    }
+
+    [Fact]
+    public void Test_AddAfterNode()
+    {
+        var test = new DoublyLinkedList<int>(new[] { 1, 3, 5 });
+        var firstNode = test.FirstNode!;
+        var middleNode = test.FirstNode!.Next!;
+        var lastNode = test.LastNode!;
+        test.AddAfterNode(firstNode, 2);
+        Assert.Equal(4, test.Count);
+        test.AddAfterNode(middleNode, 4);
+        Assert.Equal(5, test.Count);
+        test.AddAfterNode(lastNode, 6);
+        Assert.Equal(new[] { 1, 2, 3, 4, 5, 6 }, test);
+        test.AddAfterNode(firstNode, 1);
+        Assert.Equal(new[] { 1, 1, 2, 3, 4, 5, 6 }, test);
+    }
+
+    [Fact]
+    public void Test_AddBeforeNode()
+    {
+        var test = new DoublyLinkedList<int>(new[] { 1, 3, 5 });
+        var firstNode = test.FirstNode!;
+        var middleNode = test.FirstNode!.Next!;
+        var lastNode = test.LastNode!;
+        test.AddBeforeNode(firstNode, 0);
+        Assert.Equal(4, test.Count);
+        test.AddBeforeNode(middleNode, 2);
+        Assert.Equal(5, test.Count);
+        test.AddBeforeNode(lastNode, 4);
+        Assert.Equal(new[] { 0, 1, 2, 3, 4, 5 }, test);
+        test.AddBeforeNode(firstNode, 1);
+        Assert.Equal(new[] { 0, 1, 1, 2, 3, 4, 5 }, test);
     }
 }
