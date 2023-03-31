@@ -4,9 +4,11 @@ namespace ACCollections.Queue;
 
 public class Queue<TData> : IQueue<TData>
 {
+    private readonly LinkedList.LinkedList<TData> _linkedList = new();
+
     public IEnumerator<TData> GetEnumerator()
     {
-        throw new NotImplementedException();
+        return _linkedList.GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
@@ -14,30 +16,33 @@ public class Queue<TData> : IQueue<TData>
         return GetEnumerator();
     }
 
-    public bool IsEmpty { get; }
-    public int Count { get; }
+    public bool IsEmpty => Count == 0;
+    public int Count => _linkedList.Count;
+
     public void Enqueue(TData data)
     {
-        throw new NotImplementedException();
+        _linkedList.AddLast(data);
     }
 
     public TData Dequeue()
     {
-        throw new NotImplementedException();
+        var first = _linkedList.First;
+        _linkedList.RemoveFirst();
+        return first;
     }
 
     public TData Peek()
     {
-        throw new NotImplementedException();
+        return _linkedList.First;
     }
 
     public void Clear()
     {
-        throw new NotImplementedException();
+        _linkedList.Clear();
     }
 
     public bool Contains(TData data)
     {
-        throw new NotImplementedException();
+        return _linkedList.Contains(data);
     }
 }
