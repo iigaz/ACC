@@ -85,4 +85,39 @@ public class QueueTest
         foreach (var e in test) queue.Enqueue(e);
         Assert.Equal(test.Contains(element), queue.Contains(element));
     }
+
+    [Fact]
+    public void Test_PaperTask()
+    {
+        var matrix = new[,] { { 0, 0, 1, 0, 1 }, { 1, 0, 1, 0, 0 }, { 0, 1, 0, 1, 1 }, { 1, 0, 0, 1, 0 } };
+
+        var n = matrix.GetLength(0);
+        var m = matrix.GetLength(1);
+        var numberOfRegions = 0;
+
+        for (var i = 0; i < n; i++)
+        for (var j = 0; j < m; j++)
+        {
+            if (matrix[i, j] != 0) continue;
+            var queue = new Queue<(int X, int Y)>();
+            queue.Enqueue((i, j));
+            while (!queue.IsEmpty)
+            {
+                var currentPoint = queue.Dequeue();
+                if (matrix[currentPoint.X, currentPoint.Y] != 0) continue;
+                matrix[currentPoint.X, currentPoint.Y] = 2;
+                foreach (var delta in new[] { (-1, 0), (0, 1), (1, 0), (0, -1) })
+                {
+                    var newPoint = (X: currentPoint.X + delta.Item1, Y: currentPoint.Y + delta.Item2);
+                    if (newPoint.X >= 0 && newPoint.X < n && newPoint.Y >= 0 && newPoint.Y < m &&
+                        matrix[newPoint.X, newPoint.Y] == 0)
+                        queue.Enqueue(newPoint);
+                }
+            }
+
+            numberOfRegions++;
+        }
+
+        Assert.Equal(5, numberOfRegions);
+    }
 }
