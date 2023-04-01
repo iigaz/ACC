@@ -189,4 +189,33 @@ public class LinkedListTest
     {
         Assert.Equal(expected, new LinkedList<int>(test).IndexOf(element));
     }
+
+    [Theory]
+    [InlineData(new[] { 2, 4, 3 }, new[] { 5, 6, 4 }, new[] { 7, 0, 8 })]
+    [InlineData(new[] { 0 }, new[] { 0 }, new[] { 0 })]
+    [InlineData(new[] { 9, 9, 9, 9, 9, 9, 9 }, new[] { 9, 9, 9, 9 }, new[] { 8, 9, 9, 9, 0, 0, 0, 1 })]
+    public void Test_AddTwoNumbers(int[] num1Array, int[] num2Array, int[] expected)
+    {
+        // Taken from https://leetcode.com/problems/add-two-numbers/
+        var num1 = new LinkedList<int>(num1Array);
+        var num2 = new LinkedList<int>(num2Array);
+
+        var result = new LinkedList<int>();
+
+        var carry = 0;
+
+        for (var i = 0; (i < num1.Count && i < num2.Count) || carry > 0; i++)
+        {
+            var element1 = num1.IsEmpty ? 0 : num1.First;
+            var element2 = num2.IsEmpty ? 0 : num2.First;
+            var newDigit = element1 + element2 + carry;
+            carry = newDigit / 10;
+            newDigit %= 10;
+            result.AddLast(newDigit);
+            num1.RemoveFirst();
+            num2.RemoveFirst();
+        }
+
+        Assert.Equal(expected, result);
+    }
 }
