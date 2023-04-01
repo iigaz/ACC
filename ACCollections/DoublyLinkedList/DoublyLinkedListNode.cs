@@ -1,5 +1,9 @@
 namespace ACCollections.DoublyLinkedList;
 
+/// <summary>
+///     Узел двусвязного списка.
+/// </summary>
+/// <typeparam name="TData">Тип узла двусвязного списка.</typeparam>
 public class DoublyLinkedListNode<TData>
 {
     /// <summary>

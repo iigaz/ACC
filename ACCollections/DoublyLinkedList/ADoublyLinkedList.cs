@@ -2,6 +2,10 @@ using System.Collections;
 
 namespace ACCollections.DoublyLinkedList;
 
+/// <summary>
+///     Двусвязный список. Ориентирован на работу больше с элементами, чем с узлами.
+/// </summary>
+/// <typeparam name="TData">Тип данных элементов двусвязного списка.</typeparam>
 public class ADoublyLinkedList<TData> : IDoublyLinkedList<TData>
 {
     /// <summary>
@@ -47,6 +51,10 @@ public class ADoublyLinkedList<TData> : IDoublyLinkedList<TData>
         }
     }
 
+    /// <summary>
+    ///     Итератор двусвязного списка. Начало с первого узла.
+    /// </summary>
+    /// <returns>Итератор по элементам.</returns>
     public IEnumerator<TData> GetEnumerator()
     {
         var current = FirstNode;
@@ -62,7 +70,14 @@ public class ADoublyLinkedList<TData> : IDoublyLinkedList<TData>
         return GetEnumerator();
     }
 
+    /// <summary>
+    ///     Количество элементов в двусвязном списке.
+    /// </summary>
     public int Count { get; private set; }
+
+    /// <summary>
+    ///     Проверка двусвязного списка на пустоту.
+    /// </summary>
     public bool IsEmpty => Count == 0;
 
     /// <summary>

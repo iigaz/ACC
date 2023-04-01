@@ -3,6 +3,10 @@ using ACCollections.LinkedList;
 
 namespace ACCollections.Queue;
 
+/// <summary>
+///     Очередь, основанная на связном списке.
+/// </summary>
+/// <typeparam name="TData">Тип элементов очереди.</typeparam>
 public class AQueue<TData> : IQueue<TData>
 {
     private readonly ALinkedList<TData> _linkedList = new();
@@ -20,7 +24,14 @@ public class AQueue<TData> : IQueue<TData>
         return GetEnumerator();
     }
 
+    /// <summary>
+    ///     Проверка очереди на пустоту.
+    /// </summary>
     public bool IsEmpty => Count == 0;
+
+    /// <summary>
+    ///     Количество элементов в очереди.
+    /// </summary>
     public int Count => _linkedList.Count;
 
     /// <summary>

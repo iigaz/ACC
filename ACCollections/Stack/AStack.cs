@@ -3,6 +3,10 @@ using ACCollections.LinkedList;
 
 namespace ACCollections.Stack;
 
+/// <summary>
+///     Стек, основанный на связном списке.
+/// </summary>
+/// <typeparam name="TData">Тип элементов в стеке.</typeparam>
 public class AStack<TData> : IStack<TData>
 {
     private readonly ALinkedList<TData> _linkedList = new();
@@ -21,7 +25,14 @@ public class AStack<TData> : IStack<TData>
         return GetEnumerator();
     }
 
+    /// <summary>
+    ///     Количество элементов в стеке.
+    /// </summary>
     public int Count => _linkedList.Count;
+
+    /// <summary>
+    ///     Проверка стека на пустоту.
+    /// </summary>
     public bool IsEmpty => Count == 0;
 
     /// <summary>

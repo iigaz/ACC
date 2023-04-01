@@ -2,6 +2,10 @@ using System.Collections;
 
 namespace ACCollections.LinkedList;
 
+/// <summary>
+///     Связный список. Ориентирован на работу больше с элементами, чем с узлами.
+/// </summary>
+/// <typeparam name="TData">Тип элементов связного списка.</typeparam>
 public class ALinkedList<TData> : ILinkedList<TData>
 {
     /// <summary>
@@ -31,6 +35,10 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// </summary>
     public LinkedListNode<TData>? LastNode { get; private set; }
 
+    /// <summary>
+    ///     Итератор по связному списку. Начало в первом узле.
+    /// </summary>
+    /// <returns>Итератор по элементам.</returns>
     public IEnumerator<TData> GetEnumerator()
     {
         var current = FirstNode;
@@ -46,7 +54,14 @@ public class ALinkedList<TData> : ILinkedList<TData>
         return GetEnumerator();
     }
 
+    /// <summary>
+    ///     Количество элементов в связном списке.
+    /// </summary>
     public int Count { get; private set; }
+
+    /// <summary>
+    ///     Проверка связного списка на пустоту.
+    /// </summary>
     public bool IsEmpty => Count == 0;
 
     /// <summary>

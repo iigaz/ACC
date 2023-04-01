@@ -1,5 +1,9 @@
 namespace ACCollections.LinkedList;
 
+/// <summary>
+///     Узел связного списка.
+/// </summary>
+/// <typeparam name="TData">Тип элемента в узле.</typeparam>
 public class LinkedListNode<TData>
 {
     /// <summary>
