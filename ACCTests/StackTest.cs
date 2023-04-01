@@ -94,37 +94,25 @@ public class StackTest
     [InlineData("(", false)]
     [InlineData("({)}", false)]
     [InlineData(")()(", false)]
-    public void Test_BracketPairsTask(string str, bool expected)
+    [InlineData("(correct)[sequence]{with}<some>([<text>])", true)]
+    [InlineData("Incorrect sequence :)", false)]
+    public void Test_BracketPairsTask(string line, bool expected)
     {
-        // This code is not mine. I borrowed it from Who-car's stack example.
+        var openingBrackets = new[] { '(', '{', '[', '<' };
+        var closingBrackets = new[] { ')', '}', ']', '>' };
 
-        var openBrackets = new[] { '(', '{', '[', '<' };
-        var closeBrackets = new[] { ')', '}', ']', '>' };
-        var sequence = new Stack<char>();
-        foreach (var ch in str)
-            if (openBrackets.Contains(ch))
-            {
-                sequence.Push(ch);
-            }
-            else if (closeBrackets.Contains(ch))
-            {
-                if (sequence.IsEmpty)
-                {
-                    Assert.False(expected);
-                    return;
-                }
+        var stack = new Stack<char>();
 
-                if (Array.IndexOf(closeBrackets, ch) == Array.IndexOf(openBrackets, sequence.Peek()))
-                {
-                    sequence.Pop();
-                }
-                else
-                {
-                    Assert.False(expected);
-                    return;
-                }
-            }
+        foreach (var character in line)
+            if (openingBrackets.Contains(character))
+                stack.Push(character);
+            else if (closingBrackets.Contains(character))
+                if (stack.IsEmpty)
+                    stack.Push(character);
+                else if (Array.IndexOf(openingBrackets, stack.Pop()) !=
+                         Array.IndexOf(closingBrackets, character))
+                    break;
 
-        Assert.Equal(expected, sequence.IsEmpty);
+        Assert.Equal(expected, stack.IsEmpty);
     }
 }
