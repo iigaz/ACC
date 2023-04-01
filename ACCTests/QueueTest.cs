@@ -10,7 +10,7 @@ public class QueueTest
     [Fact]
     public void Test_GetEnumerator()
     {
-        var queue = new Queue<int>();
+        var queue = new AQueue<int>();
         queue.Enqueue(1);
         queue.Enqueue(2);
         queue.Enqueue(3);
@@ -30,7 +30,7 @@ public class QueueTest
     [Fact]
     public void Test_Enqueue()
     {
-        var queue = new Queue<int>();
+        var queue = new AQueue<int>();
         Assert.True(queue.IsEmpty);
         Assert.Equal(0, queue.Count);
         queue.Enqueue(1);
@@ -45,7 +45,7 @@ public class QueueTest
     [Fact]
     public void Test_Dequeue()
     {
-        var queue = new Queue<int>();
+        var queue = new AQueue<int>();
         queue.Enqueue(1);
         queue.Enqueue(2);
         Assert.Equal(1, queue.Dequeue());
@@ -60,7 +60,7 @@ public class QueueTest
     [Fact]
     public void Test_Clear()
     {
-        var queue = new Queue<int>();
+        var queue = new AQueue<int>();
         queue.Enqueue(1);
         queue.Enqueue(2);
         queue.Enqueue(3);
@@ -81,7 +81,7 @@ public class QueueTest
     [InlineData(new int[0], 1)]
     public void Test_Contains(int[] test, int element)
     {
-        var queue = new Queue<int>();
+        var queue = new AQueue<int>();
         foreach (var e in test) queue.Enqueue(e);
         Assert.Equal(test.Contains(element), queue.Contains(element));
     }
@@ -99,7 +99,7 @@ public class QueueTest
         for (var j = 0; j < m; j++)
         {
             if (matrix[i, j] != 0) continue;
-            var queue = new Queue<(int X, int Y)>();
+            var queue = new AQueue<(int X, int Y)>();
             queue.Enqueue((i, j));
             while (!queue.IsEmpty)
             {

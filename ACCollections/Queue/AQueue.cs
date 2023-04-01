@@ -1,10 +1,11 @@
 using System.Collections;
+using ACCollections.LinkedList;
 
 namespace ACCollections.Queue;
 
-public class Queue<TData> : IQueue<TData>
+public class AQueue<TData> : IQueue<TData>
 {
-    private readonly LinkedList.LinkedList<TData> _linkedList = new();
+    private readonly ALinkedList<TData> _linkedList = new();
 
     /// <summary>
     ///     Возвращает итератор, который проходится по элементам в порядке очереди, т.е. начиная с самого "старого" элемента.

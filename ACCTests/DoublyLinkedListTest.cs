@@ -11,7 +11,7 @@ public class DoublyLinkedListTest
     public void Test_GetEnumerator()
     {
         var expected = new[] { 1, 2, 3, 4, 5 };
-        var linkedList = new DoublyLinkedList<int>(expected);
+        var linkedList = new ADoublyLinkedList<int>(expected);
         var actual = new int[expected.Length];
         var i = 0;
         foreach (var element in linkedList)
@@ -30,7 +30,7 @@ public class DoublyLinkedListTest
     [InlineData(new[] { 1 }, 0)]
     public void Test_Index(int[] test, int index)
     {
-        var linkedList = new DoublyLinkedList<int>(test);
+        var linkedList = new ADoublyLinkedList<int>(test);
         Assert.Equal(test[index], linkedList[index]);
         linkedList[index] = 1337;
         Assert.Equal(1337, linkedList[index]);
@@ -39,13 +39,13 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_WrongIndex()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => new DoublyLinkedList<int>(new[] { 1, 2, 3 })[3]);
+        Assert.Throws<IndexOutOfRangeException>(() => new ADoublyLinkedList<int>(new[] { 1, 2, 3 })[3]);
     }
 
     [Fact]
     public void Test_AddFirst()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2 });
         test.AddFirst(0);
         Assert.Equal(3, test.Count);
         Assert.Equal(0, test.First);
@@ -55,7 +55,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_AddLast()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2 });
         test.AddLast(3);
         Assert.Equal(3, test.Count);
         Assert.Equal(3, test.Last);
@@ -65,7 +65,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_AddToEmptyList()
     {
-        var test = new DoublyLinkedList<int>();
+        var test = new ADoublyLinkedList<int>();
         test.AddFirst(1);
         Assert.Equal(1, test.First);
         Assert.Equal(1, test.Last);
@@ -75,7 +75,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_Remove()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2, 3 });
         var res = test.Remove(2);
         Assert.True(res);
         Assert.Equal(2, test.Count);
@@ -101,7 +101,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_RemoveAt()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2, 3 });
         var res = test.RemoveAt(1);
         Assert.True(res);
         Assert.Equal(2, test.Count);
@@ -127,7 +127,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_RemoveFirst()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2 });
         var res = test.RemoveFirst();
         Assert.True(res);
         Assert.Equal(1, test.Count);
@@ -143,7 +143,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_RemoveLast()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2 });
         var res = test.RemoveLast();
         Assert.True(res);
         Assert.Equal(1, test.Count);
@@ -159,7 +159,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_Clear()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 2, 3 });
         test.Clear();
         Assert.Equal(0, test.Count);
     }
@@ -174,13 +174,13 @@ public class DoublyLinkedListTest
     [InlineData(new int[0], 1)]
     public void Test_Contains(int[] test, int element)
     {
-        Assert.Equal(test.Contains(element), new DoublyLinkedList<int>(test).Contains(element));
+        Assert.Equal(test.Contains(element), new ADoublyLinkedList<int>(test).Contains(element));
     }
 
     [Fact]
     public void Test_Insert()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 3, 5 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 3, 5 });
         test.Insert(0, 0);
         Assert.Equal(4, test.Count);
         test.Insert(2, 2);
@@ -203,7 +203,7 @@ public class DoublyLinkedListTest
     [InlineData(new int[0], 1, -1)]
     public void Test_IndexOf(int[] test, int element, int expected)
     {
-        Assert.Equal(expected, new DoublyLinkedList<int>(test).IndexOf(element));
+        Assert.Equal(expected, new ADoublyLinkedList<int>(test).IndexOf(element));
     }
 
     [Theory]
@@ -212,7 +212,7 @@ public class DoublyLinkedListTest
     [InlineData(new int[0])]
     public void Test_Reverse(int[] expected)
     {
-        var linkedList = new DoublyLinkedList<int>(expected);
+        var linkedList = new ADoublyLinkedList<int>(expected);
         Assert.Equal(expected, linkedList);
         linkedList.Reverse();
         Assert.Equal(expected.Reverse(), linkedList);
@@ -223,7 +223,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_RemoveNode()
     {
-        var linkedList = new DoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
+        var linkedList = new ADoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
         var res = linkedList.RemoveNode(linkedList.FirstNode!);
         Assert.True(res);
         Assert.Equal(new[] { 2, 3, 4 }, linkedList);
@@ -238,7 +238,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_GetNode()
     {
-        var linkedList = new DoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
+        var linkedList = new ADoublyLinkedList<int>(new[] { 1, 2, 3, 4 });
         Assert.Equal(linkedList.FirstNode, linkedList.GetNode(0));
         Assert.Equal(linkedList.First, linkedList.GetNode(0).Data);
         Assert.Equal(linkedList.FirstNode!.Next, linkedList.GetNode(1));
@@ -250,7 +250,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_AddAfterNode()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 3, 5 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 3, 5 });
         var firstNode = test.FirstNode!;
         var middleNode = test.FirstNode!.Next!;
         var lastNode = test.LastNode!;
@@ -267,7 +267,7 @@ public class DoublyLinkedListTest
     [Fact]
     public void Test_AddBeforeNode()
     {
-        var test = new DoublyLinkedList<int>(new[] { 1, 3, 5 });
+        var test = new ADoublyLinkedList<int>(new[] { 1, 3, 5 });
         var firstNode = test.FirstNode!;
         var middleNode = test.FirstNode!.Next!;
         var lastNode = test.LastNode!;

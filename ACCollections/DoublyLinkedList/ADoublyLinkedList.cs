@@ -1,22 +1,22 @@
 using System.Collections;
 
-namespace ACCollections.LinkedList;
+namespace ACCollections.DoublyLinkedList;
 
-public class LinkedList<TData> : ILinkedList<TData>
+public class ADoublyLinkedList<TData> : IDoublyLinkedList<TData>
 {
     /// <summary>
-    ///     Связный список.
+    ///     Двусвязный список.
     /// </summary>
     /// <param name="enumerable">Начальные элементы списка. Инициализация производится за O(n).</param>
-    public LinkedList(IEnumerable<TData> enumerable)
+    public ADoublyLinkedList(IEnumerable<TData> enumerable)
     {
         foreach (var element in enumerable) AddLast(element);
     }
 
     /// <summary>
-    ///     Связный список.
+    ///     Двусвязный список.
     /// </summary>
-    public LinkedList()
+    public ADoublyLinkedList()
     {
         Clear();
     }
@@ -24,12 +24,28 @@ public class LinkedList<TData> : ILinkedList<TData>
     /// <summary>
     ///     Первый узел в списке.
     /// </summary>
-    public LinkedListNode<TData>? FirstNode { get; private set; }
+    public DoublyLinkedListNode<TData>? FirstNode { get; private set; }
 
     /// <summary>
     ///     Последний узел в списке.
     /// </summary>
-    public LinkedListNode<TData>? LastNode { get; private set; }
+    public DoublyLinkedListNode<TData>? LastNode { get; private set; }
+
+    /// <summary>
+    ///     Перевернуть двусвязный список. Эта операция выполняется за O(n).
+    /// </summary>
+    public void Reverse()
+    {
+        if (Count <= 1) return;
+        var current = FirstNode;
+        LastNode = FirstNode;
+        while (current != null)
+        {
+            (current.Next, current.Previous) = (current.Previous, current.Next);
+            FirstNode = current;
+            current = current.Previous;
+        }
+    }
 
     public IEnumerator<TData> GetEnumerator()
     {
@@ -61,7 +77,8 @@ public class LinkedList<TData> : ILinkedList<TData>
 
     /// <summary>
     ///     Получение элемента по его индексу в списке. Эта операция выполняется за O(1) при index == 0 или index == Count - 1
-    ///     (первый и последний элемент соответственно), и за O(n) в остальных случаях. При выходе индекса за границы списка
+    ///     (первый и последний элемент соответственно), и за O(n/2)=O(n) в остальных случаях. Если индекс находится в первой
+    ///     половине, поиск идет с начала. Если во второй половине, поиск идет с конца. При выходе индекса за границы списка
     ///     выбрасывается соответствующее исключение.
     /// </summary>
     public TData this[int index]
@@ -75,11 +92,17 @@ public class LinkedList<TData> : ILinkedList<TData>
     /// </summary>
     public void AddFirst(TData data)
     {
-        var node = new LinkedListNode<TData>(data);
+        var node = new DoublyLinkedListNode<TData>(data);
         if (IsEmpty)
+        {
             LastNode = node;
+        }
         else
+        {
             node.Next = FirstNode;
+            FirstNode!.Previous = node;
+        }
+
         FirstNode = node;
         Count++;
     }
@@ -89,18 +112,24 @@ public class LinkedList<TData> : ILinkedList<TData>
     /// </summary>
     public void AddLast(TData data)
     {
-        var node = new LinkedListNode<TData>(data);
+        var node = new DoublyLinkedListNode<TData>(data);
         if (IsEmpty)
+        {
             FirstNode = node;
+        }
         else
+        {
             LastNode!.Next = node;
+            node.Previous = LastNode;
+        }
+
         LastNode = node;
         Count++;
     }
 
     /// <summary>
     ///     Удалить указанный элемент из списка. Если элемент встречается несколько раз, будет удалено только первое
-    ///     совпадение. Эта операция выполняется в среднем за O(n).
+    ///     с начала совпадение. Эта операция выполняется в среднем за O(n).
     /// </summary>
     /// <returns>True если элемент был удален, false иначе.</returns>
     public bool Remove(TData data)
@@ -108,17 +137,9 @@ public class LinkedList<TData> : ILinkedList<TData>
         if (IsEmpty) return false;
         if (FirstNode!.Data!.Equals(data)) return RemoveFirst();
         var current = FirstNode.Next;
-        var last = FirstNode;
         while (current != null)
         {
-            if (current.Data!.Equals(data))
-            {
-                last.Next = current.Next;
-                Count--;
-                return true;
-            }
-
-            last = current;
+            if (current.Data!.Equals(data)) return RemoveNode(current);
             current = current.Next;
         }
 
@@ -126,17 +147,15 @@ public class LinkedList<TData> : ILinkedList<TData>
     }
 
     /// <summary>
-    ///     Удалить элемент по указанному индексу из списка. Эта операция выполняется в среднем за O(n).
+    ///     Удалить элемент по указанному индексу из списка. Эта операция выполняется в среднем за O(n/2)=O(n).
     /// </summary>
     /// <returns>True если элемент был удален, false иначе.</returns>
     public bool RemoveAt(int index)
     {
         if (index >= Count || index < 0) return false;
         if (index == 0) return RemoveFirst();
-        var previous = GetNode(index - 1);
-        previous.Next = previous.Next!.Next;
-        Count--;
-        return true;
+        if (index == Count - 1) return RemoveLast();
+        return RemoveNode(GetNode(index));
     }
 
     /// <summary>
@@ -154,6 +173,30 @@ public class LinkedList<TData> : ILinkedList<TData>
         else
         {
             FirstNode = FirstNode!.Next;
+            FirstNode!.Previous = null;
+            Count--;
+        }
+
+        return true;
+    }
+
+
+    /// <summary>
+    ///     Удалить последний элемент списка. Эта операция выполняется за O(1).
+    /// </summary>
+    /// <returns>True если элемент был удален, false иначе.</returns>
+    public bool RemoveLast()
+    {
+        if (IsEmpty)
+            return false;
+        if (Count == 1)
+        {
+            Clear();
+        }
+        else
+        {
+            LastNode = LastNode!.Previous;
+            LastNode!.Next = null;
             Count--;
         }
 
@@ -202,33 +245,49 @@ public class LinkedList<TData> : ILinkedList<TData>
     /// <summary>
     ///     Вставить элемент в список по указанному индексу. Если индекс равен числу элементов, эта функция будет эквивалентна
     ///     методу AddLast. Новый элемент вставляется перед старым элементом по этому же индексу, то есть после выполнения
-    ///     операции новый элемент можно будет получить по указанному в аргументах индексу. Выполняется в среднем за O(n).
+    ///     операции новый элемент можно будет получить по указанному в аргументах индексу. Выполняется в среднем за
+    ///     O(n/2)=O(n).
     /// </summary>
     public void Insert(int index, TData data)
     {
         if (index > Count || index < 0) throw new IndexOutOfRangeException();
         if (index == Count) AddLast(data);
         else if (index == 0) AddFirst(data);
-        else AddAfterNode(GetNode(index - 1), data);
+        else AddBeforeNode(GetNode(index), data);
     }
 
     /// <summary>
     ///     Получить узел по указанному индексу. При неправильном индексе выбрасывается исключение. Эта операция выполняется в
-    ///     среднем за O(n).
+    ///     среднем за O(n/2)=O(n). Если индекс находится в первой половине, поиск идет с начала. Если во второй половине,
+    ///     поиск идет с конца.
     /// </summary>
-    public LinkedListNode<TData> GetNode(int index)
+    public DoublyLinkedListNode<TData> GetNode(int index)
     {
         if (index >= Count || index < 0) throw new IndexOutOfRangeException();
         if (index == 0) return FirstNode!;
         if (index == Count - 1) return LastNode!;
 
-        var current = FirstNode;
-        var i = 0;
-        while (current != null)
+        if (index < Count / 2)
         {
-            if (i == index) return current;
-            i++;
-            current = current.Next;
+            var current = FirstNode;
+            var i = 0;
+            while (current != null)
+            {
+                if (i == index) return current;
+                i++;
+                current = current.Next;
+            }
+        }
+        else
+        {
+            var current = LastNode;
+            var i = Count - 1;
+            while (current != null)
+            {
+                if (i == index) return current;
+                i--;
+                current = current.Previous;
+            }
         }
 
         throw new IndexOutOfRangeException();
@@ -238,13 +297,62 @@ public class LinkedList<TData> : ILinkedList<TData>
     ///     Вставить новый элемент после указанного узла. Эта операция выполняется за O(1). Для вставки по индексу смотрите
     ///     Insert.
     /// </summary>
-    /// <param name="node">Узел, присутствующий в связном списке.</param>
+    /// <param name="node">Узел, присутствующий в двусвязном списке.</param>
     /// <param name="data">Новый элемент.</param>
-    public void AddAfterNode(LinkedListNode<TData> node, TData data)
+    public void AddAfterNode(DoublyLinkedListNode<TData> node, TData data)
     {
-        var newNode = new LinkedListNode<TData>(data);
-        newNode.Next = node.Next;
-        node.Next = newNode;
+        if (node == LastNode)
+        {
+            AddLast(data);
+            return;
+        }
+
+        var customNode = new DoublyLinkedListNode<TData>(data)
+        {
+            Previous = node,
+            Next = node.Next
+        };
+        node.Next!.Previous = customNode;
+        node.Next = customNode;
         Count++;
+    }
+
+    /// <summary>
+    ///     Вставить новый элемент до указанного узла. Эта операция выполняется за O(1). Для вставки по индексу смотрите
+    ///     Insert.
+    /// </summary>
+    /// <param name="node">Узел, присутствующий в двусвязном списке.</param>
+    /// <param name="data">Новый элемент.</param>
+    public void AddBeforeNode(DoublyLinkedListNode<TData> node, TData data)
+    {
+        if (node == FirstNode)
+        {
+            AddFirst(data);
+            return;
+        }
+
+        var customNode = new DoublyLinkedListNode<TData>(data)
+        {
+            Previous = node.Previous,
+            Next = node
+        };
+        node.Previous!.Next = customNode;
+        node.Previous = customNode;
+        Count++;
+    }
+
+    /// <summary>
+    ///     Удалить указанный узел. Эта операция выполняется за O(1).
+    /// </summary>
+    /// <param name="node">Узел, присутствующий в двусвязном списке.</param>
+    /// <returns>True если узел был удален, false иначе.</returns>
+    public bool RemoveNode(DoublyLinkedListNode<TData> node)
+    {
+        if (node == FirstNode) return RemoveFirst();
+        if (node == LastNode) return RemoveLast();
+        node.Previous!.Next = node.Next;
+        node.Next!.Previous = node.Previous!;
+        Count--;
+        return true;
     }
 }

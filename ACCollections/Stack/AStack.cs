@@ -1,10 +1,11 @@
 using System.Collections;
+using ACCollections.LinkedList;
 
 namespace ACCollections.Stack;
 
-public class Stack<TData> : IStack<TData>
+public class AStack<TData> : IStack<TData>
 {
-    private readonly LinkedList.LinkedList<TData> _linkedList = new();
+    private readonly ALinkedList<TData> _linkedList = new();
 
     /// <summary>
     ///     Возвращает итератор, который проходится по элементам стека в порядке их положения в стеке, т.е. начиная с

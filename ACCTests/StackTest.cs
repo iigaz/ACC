@@ -10,7 +10,7 @@ public class StackTest
     [Fact]
     public void Test_GetEnumerator()
     {
-        var stack = new Stack<int>();
+        var stack = new AStack<int>();
         stack.Push(1);
         stack.Push(2);
         stack.Push(3);
@@ -30,7 +30,7 @@ public class StackTest
     [Fact]
     public void Test_Push()
     {
-        var stack = new Stack<int>();
+        var stack = new AStack<int>();
         Assert.True(stack.IsEmpty);
         Assert.Equal(0, stack.Count);
         stack.Push(1);
@@ -45,7 +45,7 @@ public class StackTest
     [Fact]
     public void Test_Pop()
     {
-        var stack = new Stack<int>();
+        var stack = new AStack<int>();
         stack.Push(1);
         stack.Push(2);
         Assert.Equal(2, stack.Pop());
@@ -60,7 +60,7 @@ public class StackTest
     [Fact]
     public void Test_Clear()
     {
-        var stack = new Stack<int>();
+        var stack = new AStack<int>();
         stack.Push(1);
         stack.Push(2);
         stack.Push(3);
@@ -81,7 +81,7 @@ public class StackTest
     [InlineData(new int[0], 1)]
     public void Test_Contains(int[] test, int element)
     {
-        var stack = new Stack<int>();
+        var stack = new AStack<int>();
         foreach (var e in test) stack.Push(e);
         Assert.Equal(test.Contains(element), stack.Contains(element));
     }
@@ -102,7 +102,7 @@ public class StackTest
         var openingBrackets = new[] { '(', '{', '[', '<' };
         var closingBrackets = new[] { ')', '}', ']', '>' };
 
-        var stack = new Stack<char>();
+        var stack = new AStack<char>();
 
         foreach (var character in line)
             if (openingBrackets.Contains(character))

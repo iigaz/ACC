@@ -11,7 +11,7 @@ public class LinkedListTest
     public void Test_GetEnumerator()
     {
         var expected = new[] { 1, 2, 3, 4, 5 };
-        var linkedList = new LinkedList<int>(expected);
+        var linkedList = new ALinkedList<int>(expected);
         var actual = new int[expected.Length];
         var i = 0;
         foreach (var element in linkedList)
@@ -30,7 +30,7 @@ public class LinkedListTest
     [InlineData(new[] { 1 }, 0)]
     public void Test_Index(int[] test, int index)
     {
-        var linkedList = new LinkedList<int>(test);
+        var linkedList = new ALinkedList<int>(test);
         Assert.Equal(test[index], linkedList[index]);
         linkedList[index] = 1337;
         Assert.Equal(1337, linkedList[index]);
@@ -39,13 +39,13 @@ public class LinkedListTest
     [Fact]
     public void Test_WrongIndex()
     {
-        Assert.Throws<IndexOutOfRangeException>(() => new LinkedList<int>(new[] { 1, 2, 3 })[3]);
+        Assert.Throws<IndexOutOfRangeException>(() => new ALinkedList<int>(new[] { 1, 2, 3 })[3]);
     }
 
     [Fact]
     public void Test_AddFirst()
     {
-        var test = new LinkedList<int>(new[] { 1, 2 });
+        var test = new ALinkedList<int>(new[] { 1, 2 });
         test.AddFirst(0);
         Assert.Equal(3, test.Count);
         Assert.Equal(0, test.First);
@@ -55,7 +55,7 @@ public class LinkedListTest
     [Fact]
     public void Test_AddLast()
     {
-        var test = new LinkedList<int>(new[] { 1, 2 });
+        var test = new ALinkedList<int>(new[] { 1, 2 });
         test.AddLast(3);
         Assert.Equal(3, test.Count);
         Assert.Equal(3, test.Last);
@@ -65,7 +65,7 @@ public class LinkedListTest
     [Fact]
     public void Test_AddToEmptyList()
     {
-        var test = new LinkedList<int>();
+        var test = new ALinkedList<int>();
         test.AddFirst(1);
         Assert.Equal(1, test.First);
         Assert.Equal(1, test.Last);
@@ -75,7 +75,7 @@ public class LinkedListTest
     [Fact]
     public void Test_Remove()
     {
-        var test = new LinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ALinkedList<int>(new[] { 1, 2, 3 });
         var res = test.Remove(2);
         Assert.True(res);
         Assert.Equal(2, test.Count);
@@ -101,7 +101,7 @@ public class LinkedListTest
     [Fact]
     public void Test_RemoveAt()
     {
-        var test = new LinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ALinkedList<int>(new[] { 1, 2, 3 });
         var res = test.RemoveAt(1);
         Assert.True(res);
         Assert.Equal(2, test.Count);
@@ -127,7 +127,7 @@ public class LinkedListTest
     [Fact]
     public void Test_RemoveFirst()
     {
-        var test = new LinkedList<int>(new[] { 1, 2 });
+        var test = new ALinkedList<int>(new[] { 1, 2 });
         var res = test.RemoveFirst();
         Assert.True(res);
         Assert.Equal(1, test.Count);
@@ -143,7 +143,7 @@ public class LinkedListTest
     [Fact]
     public void Test_Clear()
     {
-        var test = new LinkedList<int>(new[] { 1, 2, 3 });
+        var test = new ALinkedList<int>(new[] { 1, 2, 3 });
         test.Clear();
         Assert.Equal(0, test.Count);
     }
@@ -158,13 +158,13 @@ public class LinkedListTest
     [InlineData(new int[0], 1)]
     public void Test_Contains(int[] test, int element)
     {
-        Assert.Equal(test.Contains(element), new LinkedList<int>(test).Contains(element));
+        Assert.Equal(test.Contains(element), new ALinkedList<int>(test).Contains(element));
     }
 
     [Fact]
     public void Test_Insert()
     {
-        var test = new LinkedList<int>(new[] { 1, 3, 5 });
+        var test = new ALinkedList<int>(new[] { 1, 3, 5 });
         test.Insert(0, 0);
         Assert.Equal(4, test.Count);
         test.Insert(2, 2);
@@ -187,7 +187,7 @@ public class LinkedListTest
     [InlineData(new int[0], 1, -1)]
     public void Test_IndexOf(int[] test, int element, int expected)
     {
-        Assert.Equal(expected, new LinkedList<int>(test).IndexOf(element));
+        Assert.Equal(expected, new ALinkedList<int>(test).IndexOf(element));
     }
 
     [Theory]
@@ -197,10 +197,10 @@ public class LinkedListTest
     public void Test_AddTwoNumbers(int[] num1Array, int[] num2Array, int[] expected)
     {
         // Taken from https://leetcode.com/problems/add-two-numbers/
-        var num1 = new LinkedList<int>(num1Array);
-        var num2 = new LinkedList<int>(num2Array);
+        var num1 = new ALinkedList<int>(num1Array);
+        var num2 = new ALinkedList<int>(num2Array);
 
-        var result = new LinkedList<int>();
+        var result = new ALinkedList<int>();
 
         var carry = 0;
 
