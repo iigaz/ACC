@@ -22,12 +22,12 @@ public class ALinkedList<TData> : ILinkedList<TData>
     }
 
     /// <summary>
-    ///     Первый узел в списке.
+    ///     Первый узел в списке. Получение выполняется за O(1).
     /// </summary>
     public LinkedListNode<TData>? FirstNode { get; private set; }
 
     /// <summary>
-    ///     Последний узел в списке.
+    ///     Последний узел в списке. Получение выполняется за O(1).
     /// </summary>
     public LinkedListNode<TData>? LastNode { get; private set; }
 
@@ -50,12 +50,12 @@ public class ALinkedList<TData> : ILinkedList<TData>
     public bool IsEmpty => Count == 0;
 
     /// <summary>
-    ///     Первый элемент в списке. То же самое, что и this[0], или FirstNode.Data.
+    ///     Первый элемент в списке. То же самое, что и this[0], или FirstNode.Data. Получение выполняется за O(1).
     /// </summary>
     public TData First => this[0];
 
     /// <summary>
-    ///     Последний элемент в списке. То же самое, что и this[^1], или LastNode.Data.
+    ///     Последний элемент в списке. То же самое, что и this[^1], или LastNode.Data. Получение выполняется за O(1).
     /// </summary>
     public TData Last => this[^1];
 
