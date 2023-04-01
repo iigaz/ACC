@@ -96,6 +96,7 @@ public class StackTest
     [InlineData(")()(", false)]
     [InlineData("(correct)[sequence]{with}<some>([<text>])", true)]
     [InlineData("Incorrect sequence :)", false)]
+    [InlineData("(]", false)]
     public void Test_BracketPairsTask(string line, bool expected)
     {
         var openingBrackets = new[] { '(', '{', '[', '<' };
@@ -107,11 +108,12 @@ public class StackTest
             if (openingBrackets.Contains(character))
                 stack.Push(character);
             else if (closingBrackets.Contains(character))
-                if (stack.IsEmpty)
-                    stack.Push(character);
-                else if (Array.IndexOf(openingBrackets, stack.Pop()) !=
-                         Array.IndexOf(closingBrackets, character))
-                    break;
+                if (stack.IsEmpty || Array.IndexOf(openingBrackets, stack.Pop()) !=
+                    Array.IndexOf(closingBrackets, character))
+                {
+                    Assert.False(expected);
+                    return;
+                }
 
         Assert.Equal(expected, stack.IsEmpty);
     }

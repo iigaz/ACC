@@ -89,7 +89,7 @@ public class QueueTest
     [Fact]
     public void Test_PaperTask()
     {
-        var matrix = new[,] { { 0, 0, 1, 0, 1 }, { 1, 0, 1, 0, 0 }, { 0, 1, 0, 1, 1 }, { 1, 0, 0, 1, 0 } };
+        var matrix = new[,] { { 0, 0, 1, 0, 1 }, { 0, 0, 1, 0, 0 }, { 0, 1, 0, 1, 1 }, { 1, 0, 0, 1, 0 } };
 
         var n = matrix.GetLength(0);
         var m = matrix.GetLength(1);
@@ -118,6 +118,6 @@ public class QueueTest
             numberOfRegions++;
         }
 
-        Assert.Equal(5, numberOfRegions);
+        Assert.Equal(4, numberOfRegions);
     }
 }
