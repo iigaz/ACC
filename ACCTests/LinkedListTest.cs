@@ -73,6 +73,28 @@ public class LinkedListTest
     }
 
     [Fact]
+    public void Test_AddRangeToBeginning()
+    {
+        var linkedList = new ALinkedList<int>();
+        linkedList.AddRangeToBeginning(new[] { 1, 2 });
+        linkedList.AddRangeToBeginning(Array.Empty<int>());
+        linkedList.AddRangeToBeginning(new ALinkedList<int>(new[] { 3, 4, 5 }));
+        Assert.Equal(5, linkedList.Count);
+        Assert.Equal(new[] { 3, 4, 5, 1, 2 }, linkedList);
+    }
+
+    [Fact]
+    public void Test_AddRangeToEnd()
+    {
+        var linkedList = new ALinkedList<int>();
+        linkedList.AddRangeToEnd(new[] { 1, 2 });
+        linkedList.AddRangeToEnd(Array.Empty<int>());
+        linkedList.AddRangeToEnd(new ALinkedList<int>(new[] { 3, 4, 5 }));
+        Assert.Equal(5, linkedList.Count);
+        Assert.Equal(new[] { 1, 2, 3, 4, 5 }, linkedList);
+    }
+
+    [Fact]
     public void Test_Remove()
     {
         var test = new ALinkedList<int>(new[] { 1, 2, 3 });
@@ -141,6 +163,39 @@ public class LinkedListTest
     }
 
     [Fact]
+    public void Test_RemoveRange()
+    {
+        var linkedList = new ALinkedList<int>(new[] { 1, 2, 3, 4, 5 });
+        var removed = linkedList.RemoveRange(1, 2);
+        Assert.True(removed);
+        Assert.Equal(3, linkedList.Count);
+        Assert.Equal(new[] { 1, 4, 5 }, linkedList);
+        removed = linkedList.RemoveRange(0, 1);
+        Assert.True(removed);
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 4, 5 }, linkedList);
+        removed = linkedList.RemoveRange(0, 2);
+        Assert.True(removed);
+        Assert.Equal(0, linkedList.Count);
+        Assert.Equal(Array.Empty<int>(), linkedList);
+        linkedList = new ALinkedList<int>(new[] { 1, 2, 3, 4, 5 });
+        removed = linkedList.RemoveRange(0, 3);
+        Assert.True(removed);
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 4, 5 }, linkedList);
+        removed = linkedList.RemoveRange(0, 3);
+        Assert.False(removed);
+        removed = linkedList.RemoveRange(-1, 1);
+        Assert.False(removed);
+        removed = linkedList.RemoveRange(3, 1);
+        Assert.False(removed);
+        removed = linkedList.RemoveRange(0, -1);
+        Assert.False(removed);
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 4, 5 }, linkedList);
+    }
+
+    [Fact]
     public void Test_Clear()
     {
         var test = new ALinkedList<int>(new[] { 1, 2, 3 });
@@ -175,6 +230,27 @@ public class LinkedListTest
         Assert.Equal(7, test.Count);
         Assert.Equal(new[] { 0, 1, 2, 3, 4, 5, 6 }, test);
         Assert.Throws<IndexOutOfRangeException>(() => test.Insert(8, 8));
+        Assert.Throws<IndexOutOfRangeException>(() => test.Insert(-1, 8));
+    }
+
+    [Fact]
+    public void Test_InsertRange()
+    {
+        var linkedList = new ALinkedList<int>(new[] { 1, 4, 5 });
+        linkedList.InsertRange(0, new[] { -1, 0 });
+        linkedList.InsertRange(1, new[] { 2, 3 });
+        linkedList.InsertRange(linkedList.Count, new[] { 6, 7 });
+        linkedList.InsertRange(0, new ALinkedList<int>(new[] { -3, -2 }));
+        linkedList.InsertRange(4, new ALinkedList<int>(new[] { 1, 0 }));
+        linkedList.InsertRange(linkedList.Count, new ALinkedList<int>(new[] { 8, 9 }));
+        Assert.Equal(15, linkedList.Count);
+        Assert.Equal(new[] { -3, -2, -1, 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, linkedList);
+        Assert.Throws<IndexOutOfRangeException>(() =>
+            linkedList.InsertRange(linkedList.Count + 1, new ALinkedList<int>(new[] { 1, 2 })));
+        Assert.Throws<IndexOutOfRangeException>(() =>
+            linkedList.InsertRange(-1, new ALinkedList<int>(new[] { 1, 2 })));
+        Assert.Equal(15, linkedList.Count);
+        Assert.Equal(new[] { -3, -2, -1, 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, linkedList);
     }
 
 
@@ -188,6 +264,77 @@ public class LinkedListTest
     public void Test_IndexOf(int[] test, int element, int expected)
     {
         Assert.Equal(expected, new ALinkedList<int>(test).IndexOf(element));
+    }
+
+    [Fact]
+    public void Test_Slice()
+    {
+        var linkedList = new ALinkedList<int>(new[] { 1, 2, 3, 4, 5 });
+        Assert.Equal(2, linkedList.Slice(0, 2).Count);
+        Assert.Equal(new[] { 1, 2 }, linkedList.Slice(0, 2));
+        Assert.Equal(3, linkedList.Slice(1, 3).Count);
+        Assert.Equal(new[] { 2, 3, 4 }, linkedList.Slice(1, 3));
+        Assert.Equal(1, linkedList.Slice(4, 1).Count);
+        Assert.Equal(new[] { 5 }, linkedList.Slice(4, 1));
+        Assert.Equal(0, linkedList.Slice(4, 0).Count);
+        Assert.Equal(Array.Empty<int>(), linkedList.Slice(4, 0));
+        Assert.Equal(5, linkedList.Slice(0, linkedList.Count).Count);
+        Assert.Equal(new[] { 1, 2, 3, 4, 5 }, linkedList.Slice(0, linkedList.Count));
+        Assert.Equal(new[] { 3, 4 }, linkedList[2..4]);
+        Assert.Equal(new[] { 1, 2, 3 }, linkedList[..3]);
+        Assert.Equal(new[] { 2, 3, 4 }, linkedList[1..^1]);
+        Assert.Equal(new[] { 4, 5 }, linkedList[3..]);
+        Assert.Throws<IndexOutOfRangeException>(() => linkedList.Slice(linkedList.Count, 10));
+        Assert.Throws<IndexOutOfRangeException>(() => linkedList.Slice(3, 10));
+        Assert.Throws<IndexOutOfRangeException>(() => linkedList.Slice(1, -1));
+    }
+
+    [Fact]
+    public void Test_Recount()
+    {
+        var linkedList = new ALinkedList<int>(new[] { 1, 2, 3, 4, 5 });
+        var changed = linkedList.Recount();
+        Assert.False(changed);
+        Assert.Equal(5, linkedList.Count);
+
+        linkedList.GetNode(2).Next = null;
+        changed = linkedList.Recount();
+        Assert.True(changed);
+        Assert.Equal(3, linkedList.Count);
+        Assert.Equal(new[] { 1, 2, 3 }, linkedList);
+        Assert.Equal(3, linkedList.Last);
+
+        linkedList.GetNode(1).Next = null;
+        changed = linkedList.Recount();
+        Assert.True(changed);
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 1, 2 }, linkedList);
+        Assert.Equal(2, linkedList.Last);
+
+        linkedList.GetNode(0).Next = null;
+        changed = linkedList.Recount();
+        Assert.True(changed);
+        Assert.Equal(1, linkedList.Count);
+        Assert.Equal(new[] { 1 }, linkedList);
+        Assert.Equal(1, linkedList.Last);
+
+        var newNode = new LinkedListNode<int>(10)
+        {
+            Next = new LinkedListNode<int>(11)
+            {
+                Next = new LinkedListNode<int>(100)
+            }
+        };
+
+        linkedList.LastNode!.Next = newNode;
+        changed = linkedList.Recount();
+        Assert.True(changed);
+        Assert.Equal(4, linkedList.Count);
+        Assert.Equal(new[] { 1, 10, 11, 100 }, linkedList);
+        Assert.Equal(100, linkedList.Last);
+
+        changed = linkedList.Recount();
+        Assert.False(changed);
     }
 
     [Theory]

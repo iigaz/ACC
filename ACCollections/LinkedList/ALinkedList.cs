@@ -228,6 +228,91 @@ public class ALinkedList<TData> : ILinkedList<TData>
     }
 
     /// <summary>
+    ///     Получение связного под-списка из текущего. Эта операция выполняется за O(n), где n - число элементов в текущем
+    ///     списке.
+    /// </summary>
+    /// <param name="start">Индекс начала под-списка.</param>
+    /// <param name="length">Длина под-списка.</param>
+    /// <returns>Связный список элементов в указанном диапазоне.</returns>
+    public ALinkedList<TData> Slice(int start, int length)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Вставить множество элементов в список по указанному индексу. Вставка производится таким образом, чтобы после ее
+    ///     выполнения первый элемент множества находился по указанному индексу. Если индекс равен числу элементов в списке,
+    ///     эта функция будет эквивалентна методу AddRangeToEnd. Операция выполняется за O(n + m), где n - размер текущего
+    ///     списка, m - размер множества.
+    /// </summary>
+    /// <param name="index">Индекс первого элемента множества в результирующем списке.</param>
+    /// <param name="enumerable">Множество элементов.</param>
+    public void InsertRange(int index, IEnumerable<TData> enumerable)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Вставить список элементов в текущий список по указанному индексу. Вставка производится таким образом, чтобы после
+    ///     ее выполнения первый элемент множества находился по указанному индексу. Если индекс равен числу элементов в текущем
+    ///     списке, эта функция будет эквивалентна методу AddRangeToEnd. Операция выполняется за O(n), где n - размер текущего
+    ///     списка.
+    /// </summary>
+    /// <param name="index">Индекс первого элемента множества в результирующем списке.</param>
+    /// <param name="linkedList">Связный список элементов.</param>
+    public void InsertRange(int index, ALinkedList<TData> linkedList)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Удалить диапазон элементов из списка. Эта операция выполняется за O(start + length) = O(n).
+    /// </summary>
+    /// <param name="start">Начало диапазона, включительно.</param>
+    /// <param name="length">Размер диапазона удаления.</param>
+    /// <returns>True если элементы были удалены, false иначе.</returns>
+    public bool RemoveRange(int start, int length)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Добавить множество элементов в начало списка. Эта операция выполняется за O(n), где n - размер входного множества.
+    /// </summary>
+    /// <param name="enumerable">Множество элементов.</param>
+    public void AddRangeToBeginning(IEnumerable<TData> enumerable)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Добавить список элементов в начало текущего списка. Эта операция выполняется за O(1).
+    /// </summary>
+    /// <param name="linkedList">Связный список элементов.</param>
+    public void AddRangeToBeginning(ALinkedList<TData> linkedList)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Добавить множество элементов в конец списка. Эта операция выполняется за O(n), где n - размер входного множества.
+    /// </summary>
+    /// <param name="enumerable">Множество элементов.</param>
+    public void AddRangeToEnd(IEnumerable<TData> enumerable)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    ///     Добавить список элементов в конец текущего списка. Эта операция выполняется за O(1).
+    /// </summary>
+    /// <param name="linkedList">Связный список элементов.</param>
+    public void AddRangeToEnd(ALinkedList<TData> linkedList)
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
     ///     Получить узел по указанному индексу. При неправильном индексе выбрасывается исключение. Эта операция выполняется в
     ///     среднем за O(n).
     /// </summary>
@@ -261,5 +346,16 @@ public class ALinkedList<TData> : ILinkedList<TData>
         newNode.Next = node.Next;
         node.Next = newNode;
         Count++;
+    }
+
+    /// <summary>
+    ///     Пересчитать элементы. Использовать в случае, если узлы текущего связного списка изменялись за пределами этого
+    ///     класса. Крайне не рекомендуется доводить связный список до состояния, когда он нуждается в пересчете. Операция
+    ///     выполняется за O(n).
+    /// </summary>
+    /// <returns>True, если список был изменен внешне. False, если после пересчета элементов длина списка осталась прежней.</returns>
+    public bool Recount()
+    {
+        throw new NotImplementedException();
     }
 }
