@@ -14,7 +14,7 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="enumerable">Начальные элементы списка. Инициализация производится за O(n).</param>
     public ALinkedList(IEnumerable<TData> enumerable)
     {
-        foreach (var element in enumerable) AddLast(element);
+        AddRangeToEnd(enumerable);
     }
 
     /// <summary>
@@ -236,7 +236,20 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <returns>Связный список элементов в указанном диапазоне.</returns>
     public ALinkedList<TData> Slice(int start, int length)
     {
-        throw new NotImplementedException();
+        if (start < 0 || start >= Count || length < 0 || start + length > Count)
+            throw new IndexOutOfRangeException();
+
+        var linkedList = new ALinkedList<TData>();
+        var node = GetNode(start);
+        var i = 0;
+        while (node != null && i < length)
+        {
+            linkedList.AddLast(node.Data);
+            node = node.Next;
+            i++;
+        }
+
+        return linkedList;
     }
 
     /// <summary>
@@ -249,20 +262,57 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="enumerable">Множество элементов.</param>
     public void InsertRange(int index, IEnumerable<TData> enumerable)
     {
-        throw new NotImplementedException();
+        if (index < 0 || index > Count)
+            throw new IndexOutOfRangeException();
+        if (index == Count)
+        {
+            AddRangeToEnd(enumerable);
+            return;
+        }
+
+        if (index == 0)
+        {
+            AddRangeToBeginning(enumerable);
+            return;
+        }
+
+        var i = 0;
+        foreach (var element in enumerable)
+        {
+            Insert(index + i, element);
+            i++;
+        }
     }
 
     /// <summary>
     ///     Вставить список элементов в текущий список по указанному индексу. Вставка производится таким образом, чтобы после
     ///     ее выполнения первый элемент множества находился по указанному индексу. Если индекс равен числу элементов в текущем
     ///     списке, эта функция будет эквивалентна методу AddRangeToEnd. Операция выполняется за O(n), где n - размер текущего
-    ///     списка.
+    ///     списка. <b>ВНИМАНИЕ! Эта операция может поменять последний узел входного списка.</b> Для корректной работы не
+    ///     рекомендуется использовать входной список после выполнения этой операции, или выполнить на нем метод Recount.
     /// </summary>
     /// <param name="index">Индекс первого элемента множества в результирующем списке.</param>
     /// <param name="linkedList">Связный список элементов.</param>
     public void InsertRange(int index, ALinkedList<TData> linkedList)
     {
-        throw new NotImplementedException();
+        if (index < 0 || index > Count)
+            throw new IndexOutOfRangeException();
+        if (index == Count)
+        {
+            AddRangeToEnd(linkedList);
+            return;
+        }
+
+        if (index == 0)
+        {
+            AddRangeToBeginning(linkedList);
+            return;
+        }
+
+        var node = GetNode(index - 1);
+        linkedList.LastNode!.Next = node.Next;
+        node.Next = linkedList.FirstNode;
+        Count += linkedList.Count;
     }
 
     /// <summary>
@@ -273,7 +323,31 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <returns>True если элементы были удалены, false иначе.</returns>
     public bool RemoveRange(int start, int length)
     {
-        throw new NotImplementedException();
+        if (start < 0 || start >= Count || length <= 0 || start + length > Count)
+            return false;
+
+        if (start == 0)
+        {
+            for (var i = 0; i < length; i++) RemoveFirst();
+        }
+        else
+        {
+            var node = GetNode(start - 1);
+            var temp = node;
+            var i = -1;
+            while (node != null && i < length)
+            {
+                i++;
+                node = node.Next;
+            }
+
+            temp.Next = node;
+            Count -= i;
+            if (node == null)
+                LastNode = temp;
+        }
+
+        return true;
     }
 
     /// <summary>
@@ -282,7 +356,8 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="enumerable">Множество элементов.</param>
     public void AddRangeToBeginning(IEnumerable<TData> enumerable)
     {
-        throw new NotImplementedException();
+        var linkedList = new ALinkedList<TData>(enumerable);
+        AddRangeToBeginning(linkedList);
     }
 
     /// <summary>
@@ -291,7 +366,11 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="linkedList">Связный список элементов.</param>
     public void AddRangeToBeginning(ALinkedList<TData> linkedList)
     {
-        throw new NotImplementedException();
+        if (linkedList.IsEmpty)
+            return;
+        linkedList.LastNode!.Next = FirstNode;
+        FirstNode = linkedList.FirstNode;
+        Count += linkedList.Count;
     }
 
     /// <summary>
@@ -300,7 +379,7 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="enumerable">Множество элементов.</param>
     public void AddRangeToEnd(IEnumerable<TData> enumerable)
     {
-        throw new NotImplementedException();
+        foreach (var element in enumerable) AddLast(element);
     }
 
     /// <summary>
@@ -309,7 +388,20 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <param name="linkedList">Связный список элементов.</param>
     public void AddRangeToEnd(ALinkedList<TData> linkedList)
     {
-        throw new NotImplementedException();
+        if (linkedList.IsEmpty)
+            return;
+        if (IsEmpty)
+        {
+            FirstNode = linkedList.FirstNode;
+            LastNode = linkedList.LastNode;
+        }
+        else
+        {
+            LastNode!.Next = linkedList.FirstNode;
+            LastNode = linkedList.LastNode;
+        }
+
+        Count += linkedList.Count;
     }
 
     /// <summary>
@@ -356,6 +448,21 @@ public class ALinkedList<TData> : ILinkedList<TData>
     /// <returns>True, если список был изменен внешне. False, если после пересчета элементов длина списка осталась прежней.</returns>
     public bool Recount()
     {
-        throw new NotImplementedException();
+        var realCount = 0;
+        var current = FirstNode;
+        var last = FirstNode;
+        while (current != null)
+        {
+            realCount++;
+            last = current;
+            current = current.Next;
+        }
+
+        if (realCount == Count && last == LastNode)
+            return false;
+
+        Count = realCount;
+        LastNode = last;
+        return true;
     }
 }

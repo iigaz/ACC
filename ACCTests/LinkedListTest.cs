@@ -193,6 +193,12 @@ public class LinkedListTest
         Assert.False(removed);
         Assert.Equal(2, linkedList.Count);
         Assert.Equal(new[] { 4, 5 }, linkedList);
+
+        linkedList = new ALinkedList<int>(new[] { 1, 2, 3, 4, 5 });
+        removed = linkedList.RemoveRange(2, 3);
+        Assert.True(removed);
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 1, 2 }, linkedList);
     }
 
     [Fact]
@@ -238,19 +244,37 @@ public class LinkedListTest
     {
         var linkedList = new ALinkedList<int>(new[] { 1, 4, 5 });
         linkedList.InsertRange(0, new[] { -1, 0 });
-        linkedList.InsertRange(1, new[] { 2, 3 });
+        linkedList.InsertRange(3, new[] { 2, 3 });
         linkedList.InsertRange(linkedList.Count, new[] { 6, 7 });
+        linkedList.InsertRange(0, Array.Empty<int>());
+        linkedList.InsertRange(linkedList.Count, Array.Empty<int>());
         linkedList.InsertRange(0, new ALinkedList<int>(new[] { -3, -2 }));
         linkedList.InsertRange(4, new ALinkedList<int>(new[] { 1, 0 }));
         linkedList.InsertRange(linkedList.Count, new ALinkedList<int>(new[] { 8, 9 }));
+        linkedList.InsertRange(0, new ALinkedList<int>());
+        linkedList.InsertRange(linkedList.Count, new ALinkedList<int>());
         Assert.Equal(15, linkedList.Count);
         Assert.Equal(new[] { -3, -2, -1, 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, linkedList);
         Assert.Throws<IndexOutOfRangeException>(() =>
             linkedList.InsertRange(linkedList.Count + 1, new ALinkedList<int>(new[] { 1, 2 })));
         Assert.Throws<IndexOutOfRangeException>(() =>
             linkedList.InsertRange(-1, new ALinkedList<int>(new[] { 1, 2 })));
+        Assert.Throws<IndexOutOfRangeException>(() =>
+            linkedList.InsertRange(linkedList.Count + 1, new[] { 1, 2 }));
+        Assert.Throws<IndexOutOfRangeException>(() =>
+            linkedList.InsertRange(-1, new[] { 1, 2 }));
         Assert.Equal(15, linkedList.Count);
         Assert.Equal(new[] { -3, -2, -1, 0, 1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }, linkedList);
+
+        linkedList.Clear();
+        linkedList.InsertRange(0, new[] { 1, 2 });
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 1, 2 }, linkedList);
+
+        linkedList.Clear();
+        linkedList.InsertRange(0, new ALinkedList<int>(new[] { 1, 2 }));
+        Assert.Equal(2, linkedList.Count);
+        Assert.Equal(new[] { 1, 2 }, linkedList);
     }
 
 
