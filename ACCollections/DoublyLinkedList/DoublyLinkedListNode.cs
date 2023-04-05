@@ -29,4 +29,12 @@ public class DoublyLinkedListNode<TData>
     ///     Предыдущий элемент.
     /// </summary>
     public DoublyLinkedListNode<TData>? Previous { get; set; }
+
+    /// <summary>
+    ///     Преобразование в строку для красивого отображения :3
+    /// </summary>
+    public override string ToString()
+    {
+        return $"[{Data}↔{Next}]";
+    }
 }

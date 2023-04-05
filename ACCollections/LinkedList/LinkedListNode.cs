@@ -24,4 +24,12 @@ public class LinkedListNode<TData>
     ///     Следующий узел.
     /// </summary>
     public LinkedListNode<TData>? Next { get; set; }
+
+    /// <summary>
+    ///     Преобразование в строку для красивого отображения :3
+    /// </summary>
+    public override string ToString()
+    {
+        return $"[{Data}→{Next}]";
+    }
 }

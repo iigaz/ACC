@@ -362,6 +362,18 @@ public class LinkedListTest
     }
 
     [Theory]
+    [InlineData(new[] { 1, 2, 3 }, "[1→[2→[3→]]]")]
+    [InlineData(new[] { 5, 4, 3, 2, 1 }, "[5→[4→[3→[2→[1→]]]]]")]
+    [InlineData(new[] { 1 }, "[1→]")]
+    [InlineData(new int[0], "")]
+    public void Test_ToString(int[] test, string expectedNodeString)
+    {
+        Assert.Equal(string.Join("→", test), new ALinkedList<int>(test).ToString());
+        if (test.Length != 0)
+            Assert.Equal(expectedNodeString, new ALinkedList<int>(test).FirstNode!.ToString());
+    }
+
+    [Theory]
     [InlineData(new[] { 2, 4, 3 }, new[] { 5, 6, 4 }, new[] { 7, 0, 8 })]
     [InlineData(new[] { 0 }, new[] { 0 }, new[] { 0 })]
     [InlineData(new[] { 9, 9, 9, 9, 9, 9, 9 }, new[] { 9, 9, 9, 9 }, new[] { 8, 9, 9, 9, 0, 0, 0, 1 })]

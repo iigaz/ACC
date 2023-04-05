@@ -280,4 +280,16 @@ public class DoublyLinkedListTest
         test.AddBeforeNode(firstNode, 1);
         Assert.Equal(new[] { 0, 1, 1, 2, 3, 4, 5 }, test);
     }
+
+    [Theory]
+    [InlineData(new[] { 1, 2, 3 }, "[1↔[2↔[3↔]]]")]
+    [InlineData(new[] { 5, 4, 3, 2, 1 }, "[5↔[4↔[3↔[2↔[1↔]]]]]")]
+    [InlineData(new[] { 1 }, "[1↔]")]
+    [InlineData(new int[0], "")]
+    public void Test_ToString(int[] test, string expectedNodeString)
+    {
+        Assert.Equal(string.Join("↔", test), new ADoublyLinkedList<int>(test).ToString());
+        if (test.Length != 0)
+            Assert.Equal(expectedNodeString, new ADoublyLinkedList<int>(test).FirstNode!.ToString());
+    }
 }

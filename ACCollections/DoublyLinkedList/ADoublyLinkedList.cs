@@ -370,4 +370,13 @@ public class ADoublyLinkedList<TData> : IDoublyLinkedList<TData>
         Count--;
         return true;
     }
+
+    /// <summary>
+    ///     Преобразование в строку для красивого отображения :3 Операция выполняется за O(n).
+    /// </summary>
+    /// <returns>Строку, содержащую элементы списка, разделенные стрелкой "↔".</returns>
+    public override string ToString()
+    {
+        return string.Join("↔", this);
+    }
 }

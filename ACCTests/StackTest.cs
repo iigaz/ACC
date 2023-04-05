@@ -87,6 +87,19 @@ public class StackTest
     }
 
     [Theory]
+    [InlineData(new[] { 1, 2, 3 })]
+    [InlineData(new[] { 5, 4, 3, 2, 1 })]
+    [InlineData(new[] { 1 })]
+    [InlineData(new int[0])]
+    public void Test_ToString(int[] test)
+    {
+        var stack = new AStack<int>();
+        foreach (var element in test) stack.Push(element);
+
+        Assert.Equal(string.Join("←", test.Reverse()), stack.ToString());
+    }
+
+    [Theory]
     [InlineData("{<>}()[]", true)]
     [InlineData("<{])", false)]
     [InlineData("((({})))", true)]

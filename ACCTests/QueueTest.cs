@@ -86,6 +86,19 @@ public class QueueTest
         Assert.Equal(test.Contains(element), queue.Contains(element));
     }
 
+    [Theory]
+    [InlineData(new[] { 1, 2, 3 })]
+    [InlineData(new[] { 5, 4, 3, 2, 1 })]
+    [InlineData(new[] { 1 })]
+    [InlineData(new int[0])]
+    public void Test_ToString(int[] test)
+    {
+        var queue = new AQueue<int>();
+        foreach (var element in test) queue.Enqueue(element);
+
+        Assert.Equal(string.Join("←", test), queue.ToString());
+    }
+
     [Fact]
     public void Test_PaperTask()
     {

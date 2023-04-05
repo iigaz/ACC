@@ -79,4 +79,13 @@ public class AStack<TData> : IStack<TData>
     {
         return _linkedList.Contains(data);
     }
+
+    /// <summary>
+    ///     Преобразование в строку для красивого отображения :3 Операция выполняется за O(n).
+    /// </summary>
+    /// <returns>Строку, содержащую элементы стека, разделенные стрелкой "←".</returns>
+    public override string ToString()
+    {
+        return string.Join("←", this);
+    }
 }
